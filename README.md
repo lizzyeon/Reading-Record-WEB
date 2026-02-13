@@ -1,3 +1,6 @@
+![Python](https://img.shields.io/badge/Python-3.14-blue)
+![Django](https://img.shields.io/badge/Django-5.0-green)
+
 # BOOKSNAP
 
 Instagram 클론코딩을 참고하여 만든 **독서 기록 웹 서비스**입니다.
@@ -44,7 +47,7 @@ Instagram 클론코딩을 참고하여 만든 **독서 기록 웹 서비스**입
 ---
 
 ## Current Structure
-
+'''
 Reading-Record-WEB
 ├─ INSTAGRAM/
 ├─ static/
@@ -53,7 +56,7 @@ Reading-Record-WEB
 ├─ manage.py
 ├─ requirements.txt
 ├─ .gitignore
-
+'''
 ---
 
 ## 🏃 Run Locally
@@ -63,7 +66,7 @@ git clone https://github.com/your-id/Reading-Record-WEB.git
 cd Reading-Record-WEB
 pip install -r requirements.txt
 python manage.py runserver
-
+'''
 ---
 
 ## Development Log
