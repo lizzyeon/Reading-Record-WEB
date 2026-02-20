@@ -1,5 +1,5 @@
 """
-ASGI config for INSTAGRAM project.
+ASGI config for BOOKSNAP project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'INSTAGRAM.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'BOOKSNAP.settings')
 
 application = get_asgi_application()
