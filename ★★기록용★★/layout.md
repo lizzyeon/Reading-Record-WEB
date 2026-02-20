@@ -25,7 +25,11 @@
 
 ## 2. FEED 
 
-<img width="1232" height="660" alt="스크린샷 2026-02-20 174955" src="https://github.com/user-attachments/assets/e1e315ab-1027-443a-a0d7-89d60cf6350a" />
+<p align="center">
+<img alt="스크린샷 2026-02-20 182319" src="https://github.com/user-attachments/assets/23ff1875-c895-4c0a-b7cd-2609413e1f10" width=48%>
+<img alt="스크린샷 2026-02-20 182333" src="https://github.com/user-attachments/assets/a5a5dc9e-2511-4298-a6b2-403fa82d6559" width=48%>
+</p>
+
 
 ```html
 <div style="width: 400px; height: 2000px; background: #f4f4f4; position: fixed; left: 62%">
@@ -38,10 +42,5 @@
 ### 2-1. FEED - LEFT
 
 
-
-
-<img width="673" height="914" alt="스크린샷 2026-02-20 174816" src="https://github.com/user-attachments/assets/dac9cda1-396b-4c84-abc6-e4441ac63f1b" />
-
-<img width="678" height="912" alt="스크린샷 2026-02-20 174807" src="https://github.com/user-attachments/assets/a18892cf-e6ec-4c01-b2aa-18fd2aae001f" />
-
+## 2-2. FEED - RIGHT
 
