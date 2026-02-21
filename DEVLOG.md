@@ -73,7 +73,25 @@
 
 ## 2026-02-20
 
+### 🏗 MTV 구조 이해  
+- Model: 데이터 구조 정의 및 DB와 연결  
+- Template: 화면(UI) 구성  
+- View: 요청을 처리하고 Model과 Template를 연결  
+- Django는 MTV 패턴을 기반으로 동작함을 구조적으로 이해  
 
+### ⚙ ORM 개념 이해  
+- Django ORM(Object Relational Mapping) 개념 학습  
+- SQL을 직접 작성하지 않고 Python 코드로 DB 조작 가능  
+- `Feed.objects.create()` 형태로 데이터 생성  
+- Python 코드가 내부적으로 SQL로 변환되어 실행되는 구조 이해 
+
+### 🗂 Feed 모델 생성  
+- `Feed` 모델 정의 
+- (content, image, profile_image, user_id, like_count)  
+- `makemigrations` / `migrate` 실행  
+- `content_feed` 테이블 생성 확인  
+- PyCharm Database 콘솔에서 SQL 직접 실행
 
 📌 **배운 점**
-- 
+- ORM을 사용하면 Model과 DB가 자동으로 매핑되어 SQL을 직접 작성하지 않아도 DB를 관리할 수 있음   
+- 레이아웃(프론트엔드)을 먼저 구현한 뒤, 데이터의 동작 원리의 큰 흐름을 이해   
