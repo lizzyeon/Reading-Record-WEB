@@ -12,226 +12,354 @@
     <!-- Google Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
+    <!-- Jquery Link -->
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+
     <title>독서기록장</title>
 
     <style>
         .box {
-        width: 150px;
-        height: 150px;
-        border-radius: 70%;
-        overflow: hidden;
+            width: 150px;
+            height: 150px;
+            border-radius: 70%;
+            overflow: hidden;
         }
         .profile {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .feed_box {
-        border: solid 1px gray;
-        background-color: white
+            border: solid 1px gray;
+            background-color: white
         }
+
+        .modal_overlay {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(1.5px);
+            -webkit-backdrop-filter: blur(1.5px);
+        }
+
+        .modal_window {
+            background: white;
+            backdrop-filter: blur(13.5px);
+            -webkit-backdrop-filter: blur(13.5px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 800px;
+            height: 600px;
+            position: relative;
+            padding: 10px;
+
+        }
+
     </style>
 </head>
 
 <body>
-<!-- navbar -->
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(252,252,252); position: fixed; width: 100%">
-<div class="container-fluid" style="justify-content: space-between; flex-wrap: nowrap; width: 1000px">
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(252,252,252); position: fixed; width: 100%">
+    <div class="container-fluid" style="justify-content: space-between; flex-wrap: nowrap; width: 1000px">
 
-    <!-- 왼쪽 : 로고 -->
-    <a class="navbar-brand" href="#">
-        <img src="{% static 'images/BOOKSNAP.png' %}" style="height:40px;">
-    </a>
+        <!-- 왼쪽 : 로고 -->
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'images/BOOKSNAP.png' %}" style="height:40px;">
+        </a>
 
 
-    <!-- 가운데 : 검색창 -->
-    <div class="mx-auto d-flex" style="width:300px; height: 25px">
-        <input class="form-control me-2" style="box-shadow: none" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit" style="width:60px"><span class="material-symbols-outlined">search</span></button>
+        <!-- 가운데 : 검색창 -->
+        <div class="mx-auto d-flex" style="width:300px; height: 25px">
+            <input class="form-control me-2" style="box-shadow: none" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit" style="width:60px"><span class="material-symbols-outlined">search</span></button>
+        </div>
+
+        <!-- 오른쪽 : 아이콘 그룹 -->
+        <div class="d-flex gap-3 ms-auto">
+            <span class="material-symbols-outlined">home</span>
+            <span class="material-symbols-outlined">send</span>
+            <span id="nav_bar_add_box" class="material-symbols-outlined">add_box</span>
+            <span class="material-symbols-outlined">explore</span>
+            <span class="material-symbols-outlined">mood_heart</span>
+        </div>
     </div>
+    </nav>
 
-    <!-- 오른쪽 : 아이콘 그룹 -->
-    <div class="d-flex gap-3 ms-auto">
-        <span class="material-symbols-outlined">home</span>
-        <span class="material-symbols-outlined">send</span>
-        <span class="material-symbols-outlined">add_box</span>
-        <span class="material-symbols-outlined">explore</span>
-        <span class="material-symbols-outlined">mood_heart</span>
-    </div>
-</div>
-</nav>
+    <!-- 피드 화면 -->
+    <div style="display: flex; flex-direction: row; text-align: center; justify-content:center; padding-top: 66px; background: #f4f4f4">
+        <!-- 왼쪽 피드 -->
+        <div style="width:600px; margin-right: 270px">
+            {% for feed in feeds %}
+                <div class="feed_box" style="margin-bottom: 30px">
 
-<!-- 피드 화면 -->
-<div style="display: flex; flex-direction: row; text-align: center; justify-content:center; padding-top: 66px; background: #f4f4f4">
-    <!-- 왼쪽 피드 -->
-    <div style="width:600px; margin-right: 270px">
-        {% for feed in feeds %}
-            <div class="feed_box" style="margin-bottom: 30px">
+                <!-- 프로필 -->
+                <div style="display: flex; flex-direction: row; align-items: center; margin: 10px">
+                    <!-- 프로필 사진 -->
+                    <div class="box" style="height: 60px; width: 60px">
+                        <img class="profile" src="{% static feed.profile_image %}" style="height:60px; width: 60px">
+                    </div>
+                    <!-- 아이디 -->
+                    <div style="margin-left: 10px">
+                        <b>{{ feed.user_id }}</b>
+                    </div>
+                </div>
+
+                <!-- 게시물 -->
+                <div>
+                    <img class="profile" src="{% static feed.image %}" style="height: 600px">
+                </div>
+
+                <!-- 반응(클릭)/저장 -->
+                <div  style="display: flex; flex-direction: row; justify-content: space-between; margin: 10px">
+                    <div>
+                        <span class="material-symbols-outlined">favorite</span>
+                        <span class="material-symbols-outlined">comment</span>
+                        <span class="material-symbols-outlined">send</span>
+                    </div>
+                    <div>
+                        <span class="material-symbols-outlined">bookmark</span>
+                    </div>
+                </div>
+
+                <!-- 좋아요 -->
+                <div style="text-align: left; font-size: 14px; margin: 0 10px">
+                    LIZZY <b>외 {{ feed.like_count }}명</b>이 좋아합니다
+                </div>
+
+                <div style="text-align: left; font-size: 16px; margin-left: 10px; margin-bottom: 7px; margin-top: 7px">
+                    <b>{{ feed.user_id }}</b> {{ feed.content}}
+                </div>
+
+                <!-- 댓글들 -->
+                <div style="text-align: left; font-size: 16px; margin: 0 10px"><b>PEDRO</b> 좋은 책이네요!</div>
+                <div style="text-align: left; font-size: 16px; margin: 0 10px"><b>MARIA</b> 저도 읽어봐야겠어요</div>
+                <div style="text-align: left; font-size: 16px; margin: 0 10px"><b>ANNA</b> 추천 감사해요 >_<</div>
+            <hr style="margin-top: 10px; margin-bottom: 0px">
+                <div> <input type="text" class="form-control" style="box-shadow: none; border: none" placeholder="댓글 달기..."> </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
+
+        <!-- 오른쪽 피드 -->
+        <div style="width: 400px; height: 2000px; background: #f4f4f4; position: fixed; left: 62%">
 
             <!-- 프로필 -->
             <div style="display: flex; flex-direction: row; align-items: center; margin: 10px">
                 <!-- 프로필 사진 -->
                 <div class="box" style="height: 60px; width: 60px">
-                    <img class="profile" src="{% static feed.profile_image %}" style="height:60px; width: 60px">
+                    <img class="profile" src="{% static 'images/PROFILE.png' %}" style="height:60px; width: 60px">
                 </div>
                 <!-- 아이디 -->
                 <div style="margin-left: 10px">
-                    <b>{{ feed.user_id }}</b>
+                    <b>SANDRA</b>
                 </div>
             </div>
 
-            <!-- 게시물 -->
+            <!-- 회원님을 위한 추천 -->
             <div>
-                <img class="profile" src="{% static feed.image %}" style="height: 600px">
-            </div>
-
-            <!-- 반응(클릭)/저장 -->
-            <div  style="display: flex; flex-direction: row; justify-content: space-between; margin: 10px">
-                <div>
-                    <span class="material-symbols-outlined">favorite</span>
-                    <span class="material-symbols-outlined">comment</span>
-                    <span class="material-symbols-outlined">send</span>
+                <!-- 글자 -->
+                <div style="display: flex; flex-direction: row; justify-content: space-between; margin: 20px">
+                    <div style="font-weight: bold">
+                        회원님을 위한 추천
+                    </div>
+                    <div>
+                        <a href="#" style="font-weight: bold; color: black; text-decoration: none"> 모두보기 </a>
+                    </div>
                 </div>
-                <div>
-                    <span class="material-symbols-outlined">bookmark</span>
+
+                <!-- 추천 목록 -->
+                <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px">
+
+                    <div style="display: flex; flex-direction: row;">
+                        <!-- 프로필 사진 -->
+                        <div class="box" style="height: 40px; width: 40px">
+                            <img class="profile" src="{% static 'images/PEDRO.png' %}" style="height:40px; width: 40px">
+                        </div>
+
+                        <!-- 아이디 -->
+                        <div style="margin-left: 10px; text-align: left">
+                            <div style="font-weight: bold; font-size: 14px">PEDRO</div>
+                            <div style="color: gray; font-size: 12px">MUHAMAD ALI</div>
+                        </div>
+                    </div>
+
+                        <!-- 팔로우 -->
+                    <div>
+                        <a href="#" style="font-size: 14px; font-weight: bold; color: blue; text-decoration: none; margin-right: 15px">팔로우</a>
+                    </div>
                 </div>
-            </div>
+                <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px">
 
-            <!-- 좋아요 -->
-            <div style="text-align: left; font-size: 14px; margin: 0 10px">
-                LIZZY <b>외 {{ feed.like_count }}명</b>이 좋아합니다
-            </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <!-- 프로필 사진 -->
+                        <div class="box" style="height: 40px; width: 40px">
+                            <img class="profile" src="{% static 'images/PEDRO.png' %}" style="height:40px; width: 40px">
+                        </div>
 
-            <div style="text-align: left; font-size: 16px; margin-left: 10px; margin-bottom: 7px; margin-top: 7px">
-                <b>{{ feed.user_id }}</b> {{ feed.content}}
-            </div>
+                        <!-- 아이디 -->
+                        <div style="margin-left: 10px; text-align: left">
+                            <div style="font-weight: bold; font-size: 14px">PEDRO</div>
+                            <div style="color: gray; font-size: 12px">MUHAMAD ALI</div>
+                        </div>
+                    </div>
 
-            <!-- 댓글들 -->
-            <div style="text-align: left; font-size: 16px; margin: 0 10px"><b>PEDRO</b> 좋은 책이네요!</div>
-            <div style="text-align: left; font-size: 16px; margin: 0 10px"><b>MARIA</b> 저도 읽어봐야겠어요</div>
-            <div style="text-align: left; font-size: 16px; margin: 0 10px"><b>ANNA</b> 추천 감사해요 >_<</div>
-        <hr style="margin-top: 10px; margin-bottom: 0px">
-            <div> <input type="text" class="form-control" style="box-shadow: none; border: none" placeholder="댓글 달기..."> </div>
-        </div>
-        {% endfor %}
+                        <!-- 팔로우 -->
+                    <div>
+                        <a href="#" style="font-size: 14px; font-weight: bold; color: blue; text-decoration: none; margin-right: 15px">팔로우</a>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px">
 
-    </div>
-
-
-    <!-- 오른쪽 피드 -->
-    <div style="width: 400px; height: 2000px; background: #f4f4f4; position: fixed; left: 62%">
-
-        <!-- 프로필 -->
-        <div style="display: flex; flex-direction: row; align-items: center; margin: 10px">
+        <div style="display: flex; flex-direction: row;">
             <!-- 프로필 사진 -->
-            <div class="box" style="height: 60px; width: 60px">
-                <img class="profile" src="{% static 'images/PROFILE.png' %}" style="height:60px; width: 60px">
+            <div class="box" style="height: 40px; width: 40px">
+                <img class="profile" src="{% static 'images/PEDRO.png' %}" style="height:40px; width: 40px">
             </div>
+
             <!-- 아이디 -->
-            <div style="margin-left: 10px">
-                <b>SANDRA</b>
+            <div style="margin-left: 10px; text-align: left">
+                <div style="font-weight: bold; font-size: 14px">PEDRO</div>
+                <div style="color: gray; font-size: 12px">MUHAMAD ALI</div>
             </div>
         </div>
 
-        <!-- 회원님을 위한 추천 -->
+            <!-- 팔로우 -->
         <div>
-            <!-- 글자 -->
-            <div style="display: flex; flex-direction: row; justify-content: space-between; margin: 20px">
-                <div style="font-weight: bold">
-                    회원님을 위한 추천
-                </div>
-                <div>
-                    <a href="#" style="font-weight: bold; color: black; text-decoration: none"> 모두보기 </a>
-                </div>
-            </div>
-
-            <!-- 추천 목록 -->
-            <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px">
-
-                <div style="display: flex; flex-direction: row;">
-                    <!-- 프로필 사진 -->
-                    <div class="box" style="height: 40px; width: 40px">
-                        <img class="profile" src="{% static 'images/PEDRO.png' %}" style="height:40px; width: 40px">
-                    </div>
-
-                    <!-- 아이디 -->
-                    <div style="margin-left: 10px; text-align: left">
-                        <div style="font-weight: bold; font-size: 14px">PEDRO</div>
-                        <div style="color: gray; font-size: 12px">MUHAMAD ALI</div>
-                    </div>
-                </div>
-
-                    <!-- 팔로우 -->
-                <div>
-                    <a href="#" style="font-size: 14px; font-weight: bold; color: blue; text-decoration: none; margin-right: 15px">팔로우</a>
-                </div>
-            </div>
-            <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px">
-
-                <div style="display: flex; flex-direction: row;">
-                    <!-- 프로필 사진 -->
-                    <div class="box" style="height: 40px; width: 40px">
-                        <img class="profile" src="{% static 'images/PEDRO.png' %}" style="height:40px; width: 40px">
-                    </div>
-
-                    <!-- 아이디 -->
-                    <div style="margin-left: 10px; text-align: left">
-                        <div style="font-weight: bold; font-size: 14px">PEDRO</div>
-                        <div style="color: gray; font-size: 12px">MUHAMAD ALI</div>
-                    </div>
-                </div>
-
-                    <!-- 팔로우 -->
-                <div>
-                    <a href="#" style="font-size: 14px; font-weight: bold; color: blue; text-decoration: none; margin-right: 15px">팔로우</a>
-                </div>
-            </div>
-            <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px">
-
-    <div style="display: flex; flex-direction: row;">
-        <!-- 프로필 사진 -->
-        <div class="box" style="height: 40px; width: 40px">
-            <img class="profile" src="{% static 'images/PEDRO.png' %}" style="height:40px; width: 40px">
-        </div>
-
-        <!-- 아이디 -->
-        <div style="margin-left: 10px; text-align: left">
-            <div style="font-weight: bold; font-size: 14px">PEDRO</div>
-            <div style="color: gray; font-size: 12px">MUHAMAD ALI</div>
+            <a href="#" style="font-size: 14px; font-weight: bold; color: blue; text-decoration: none; margin-right: 15px">팔로우</a>
         </div>
     </div>
+                <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px">
 
-        <!-- 팔로우 -->
-    <div>
-        <a href="#" style="font-size: 14px; font-weight: bold; color: blue; text-decoration: none; margin-right: 15px">팔로우</a>
-    </div>
-</div>
-            <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px">
+                    <div style="display: flex; flex-direction: row;">
+                        <!-- 프로필 사진 -->
+                        <div class="box" style="height: 40px; width: 40px">
+                            <img class="profile" src="{% static 'images/PEDRO.png' %}" style="height:40px; width: 40px">
+                        </div>
 
-                <div style="display: flex; flex-direction: row;">
-                    <!-- 프로필 사진 -->
-                    <div class="box" style="height: 40px; width: 40px">
-                        <img class="profile" src="{% static 'images/PEDRO.png' %}" style="height:40px; width: 40px">
+                        <!-- 아이디 -->
+                        <div style="margin-left: 10px; text-align: left">
+                            <div style="font-weight: bold; font-size: 14px">PEDRO</div>
+                            <div style="color: gray; font-size: 12px">MUHAMAD ALI</div>
+                        </div>
                     </div>
 
-                    <!-- 아이디 -->
-                    <div style="margin-left: 10px; text-align: left">
-                        <div style="font-weight: bold; font-size: 14px">PEDRO</div>
-                        <div style="color: gray; font-size: 12px">MUHAMAD ALI</div>
+                        <!-- 팔로우 -->
+                    <div>
+                        <a href="#" style="font-size: 14px; font-weight: bold; color: blue; text-decoration: none; margin-right: 15px">팔로우</a>
                     </div>
                 </div>
 
-                    <!-- 팔로우 -->
-                <div>
-                    <a href="#" style="font-size: 14px; font-weight: bold; color: blue; text-decoration: none; margin-right: 15px">팔로우</a>
-                </div>
             </div>
+
+            <!-- 그 외 안내 -->
+            <div style="margin-top: 50px; margin-left: 10px; font-size: 12px; color: darkgray; text-align: left"> 2026 독서기록장 by LIZZY </div>
 
         </div>
 
-        <!-- 그 외 안내 -->
-        <div style="margin-top: 50px; margin-left: 10px; font-size: 12px; color: darkgray; text-align: left"> 2026 독서기록장 by LIZZY </div>
-
     </div>
 
-</div>
+    <!-- Modal Layout(HTML) -->
+    <!-- 전체 검정 화면 -->
+    <div class="modal_overlay">
+
+        <!-- 가운데 흰 화면 -->
+        <div class="modal_window">
+
+            <!-- 상단 바 -->
+            <div style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 10px">
+                <div style="width:40px">&nbsp;</div>
+                <div style="font-weight: bold; display:flex; align-items:center; justify-content:center;">
+                    <span class="material-symbols-outlined" style="margin-right: 5px">photo_camera</span>
+                    SNAP YOUR BOOK
+                </div>
+                <div><span class="material-symbols-outlined">close</span></div>
+            </div>
+
+            <!-- Image Drog & Drop-->
+            <div class="img_upload_space" style="background-color: orange; width :100%; height: 530px; margin-top: 10px"></div>
+
+        </div>
+    </div>
+
+    <!-- Modal Action -->
+    <script>
+
+        /* Open Modal*/
+        $('#nav_bar_add_box').click(function (){   // nav_bar_add_box를 click하면 함수 실행
+            $('.modal_overlay').css({              // 그 함수는 .modal_overlay의 css 속성 중
+                display : 'flex'                   // display 값을 flex로 변경함 (기본은 none)
+            });
+            $(document.body).css({
+                overflow: 'hidden'                 // 스크롤 없애기
+            });
+        });
+
+        /* Event 연결 */
+        $('.img_upload_space')            // drog&drop html에 대하여
+            .on("dragover", dragOver)     // 파일을 그 영역 위로 끌어오면 dragOver 함수 실행
+            .on("dragleave", dragOver)    // 파일을 영역 밖으로 빼면 dragOver 함수 실행
+            .on("drop", uploadFiles);     // 파일을 실제로 drop 하면 uploadFiles 함수 실행
+
+        /* Drag 상태 처리 */
+        function dragOver(e){             // event 객체에 대하여
+            e.stopPropagation();          // event bubbling(부모 요소로 퍼지는 것) 막음
+            e.preventDefault();           // 브라우저 기본 동작(새 창으로 열림) 막음
+
+            if (e.type == "dragover") {              // drag 하는 중에
+                $(e.target).css({
+                    "background-color": "black",     // 배경 색상은 black
+                    "outline-offset": "-20px"
+                });
+
+            } else {                                 // drag 하지 않는 중에(leave)
+                $(e.target).css({
+                    "background-color": "gray",      // 배경 색상은 gray
+                    "outline-offset": "-10px"
+                });
+            }
+        }
+
+        /* 파일 업로드 처리 - 파일 drop 시 */
+        function uploadFiles(e){
+            e.stopPropagation();
+            e.preventDefault();
+
+            e.dataTransfer = e.originalEvent.dataTransfer; // 원본 이벤트에서 실제 파일 데이터를 꺼냄
+            var files = e.target.files || e.dataTransfer.files; // 그 파일 데이터를 files 변수에 저장
+                                                                // 그 후, 이미지인지 검사하고 화면에 보여줌
+
+            /* 이미지 확인 */
+            if (files.length > 1) {          // 2장 이상 업로드 시 경고
+                alert('1 Picture only');
+                return;
+            }
+
+            if (files[0].type.match(/image.*/)) {   // 파일 타입이 이미지인지 검사
+                $(e.target).css({                   // 업로드한 파일을 임시 URL로 변환. div 배경에 이미지 표시
+                    "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
+                    "outline": "none",
+                    "background-size": "100% 100%"
+                });
+            } else {
+                alert('img files only');
+                return;
+            }
+
+        }
+    </script>
+
+
+
+</body>
+
+</html>
