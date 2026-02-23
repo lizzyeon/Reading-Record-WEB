@@ -1,5 +1,22 @@
 # 📒 BOOKSNAP Development Log
 
+## 2026-02-23
+
+<img src="static/d_images/2026-02-23-1.png.png" width="500">
+<img src="static/d_images/2026-02-23-2.png.png" width="500">
+
+### 🪟 Drop 이후 모달 전환 로직 구현(second_modal)
+- first_modal, second_modal로 id를 분리하여 모달 상태를 구분
+- 이미지 파일이 정상적으로 감지되면 #first_modal은 display: none, #second_modal은 display: flex로 변경
+- 기존 e.target 대신 .img_upload_space 선택자로 변경하여 모달 전환 후에도 정상적으로 이미지가 표시되도록 수정
+- second_modal에서 왼쪽(70%) 이미지 창과 오른쪽(30%) 글쓰는 창 배치
+- second_modal에서 flex 레이아웃을 적용해 이미지(70%)와 글쓰기 영역(30%)을 분리
+
+📌 **배운 점**
+- 모달에 id를 지정하여 JS에서 특정 요소를 제어 할 수 있음
+- e.target을 .img_upload_space를 사용하여, 드롭 위치가 아닌 second_modal 기준으로 이미지가 표시됨을 이해
+<br><br><br><br>
+- 
 ---
 
 ## 2026-02-22
@@ -20,6 +37,7 @@
 📌 **배운 점**
 - HTML은 화면의 구조를 만들고 JS는 동작을 제어하며, 두 요소가 결합되어 동적인 UI가 완성된다는 것 이해
 - 'Drog & Drop'의 내부 흐름(이벤트 발생 → 파일 정보 전달 → 파일 접근 → 화면 반영)을 이해
+<br><br><br><br>
 
 ---
 
@@ -42,7 +60,7 @@
 
 - HTML 서버 → 서버가 **완성된 HTML 화면을 만들어서** 브라우저에 전달
 - API 서버 → 서버는 **데이터(JSON)만 전달**하고, 화면은 프론트엔드가 구성
-
+<br><br><br><br>
 ---
 
 ## 2026-02-20
@@ -69,7 +87,7 @@
 📌 **배운 점**
 - ORM을 사용하면 Model과 DB가 자동으로 매핑되어 SQL을 직접 작성하지 않아도 DB를 관리할 수 있음   
 - 레이아웃(프론트엔드)을 먼저 구현한 뒤, 데이터의 동작 원리의 큰 흐름을 이해
-
+<br><br><br><br>
 ---
 
 ## 2026-02-19
@@ -96,7 +114,7 @@
 - 원하는 UI를 구현하기 위해 CSS 속성을 검색하고 적용해보는 과정을 통해 문제를 해결함
 - 부모 요소의 너비와 자식 요소의 배치 방식이 전체 레이아웃에 미치는 영향을 체감함
 - 특히 `display: flex`, `justify-content`, `flex-direction`, `position: fixed`를 사용해 봄
-
+<br><br><br><br>
 ---
 
 ## 2026-02-13
@@ -119,7 +137,7 @@
 - Django static 파일 로드 구조 이해
 - settings.py 설정의 중요성
 - Git을 통한 기능 단위 관리 시작
-
+<br><br><br><br>
 ---
 
 ## 2026-02-12

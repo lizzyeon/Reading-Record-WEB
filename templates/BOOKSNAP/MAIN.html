@@ -268,9 +268,9 @@
 
     </div>
 
-    <!-- Modal Layout(HTML) -->
+    <!-- #1 Modal Layout(HTML) -->
     <!-- 전체 검정 화면 -->
-    <div class="modal_overlay">
+    <div id="first_modal" class="modal_overlay">
 
         <!-- 가운데 흰 화면 -->
         <div class="modal_window">
@@ -286,17 +286,72 @@
             </div>
 
             <!-- Image Drog & Drop-->
-            <div class="img_upload_space" style="background-color: orange; width :100%; height: 530px; margin-top: 10px"></div>
+            <div class="img_upload_space" style="border-top: solid 1px darkgray; width :100%; height: 530px; margin-top: 10px"></div>
 
         </div>
     </div>
+
+    <!-- #2 Modal Layout(HTML) -->
+    <!-- 전체 검정 화면 -->
+    <div id="second_modal" class="modal_overlay">
+
+        <!-- 가운데 흰 화면 -->
+        <div class="modal_window">
+
+            <!-- 상단 바 -->
+            <div style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 10px">
+                <div style="width:40px">&nbsp;</div>
+                <div style="font-weight: bold; display:flex; align-items:center; justify-content:center;">
+                    <span class="material-symbols-outlined" style="margin-right: 5px">photo_camera</span>
+                    SNAP YOUR BOOK
+                </div>
+                <div><span class="material-symbols-outlined">close</span></div>
+            </div>
+
+            <!-- 이미지 | 글쓰기 -->
+            <div style="display: flex; flex-direction: row; border-top: solid 1px darkgray; margin-top: 10px">
+
+                <!-- 이미지 -->
+                <div class="img_upload_space" style="width :70%; height: 530px"></div>
+
+                <!-- 글쓰기 -->
+                <div style="display: flex; flex-direction: column; border-left: solid 1px darkgray; width: 30%">
+
+                    <!-- 프로필 -->
+                    <div style="display: flex; flex-direction: row; align-items: center; margin: 10px">
+                        <!-- 프로필 사진 -->
+                        <div class="box" style="height: 35px; width: 35px">
+                            <img class="profile" src="{% static 'images/PROFILE.png' %}"
+                                 style="height:35px; width: 35px">
+                        </div>
+                        <!-- 아이디 -->
+                        <div style="margin-left: 10px; font-size: 12px">
+                            <b>SANDRA</b>
+                        </div>
+                    </div>
+
+                    <!-- 글쓰는 곳 -->
+                    <div>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" style="width: 100%; height: 440px"></textarea>
+                    </div>
+
+                    <!-- 버튼 -->
+                    <button type="button" class="btn btn-info" style="width: 100%">공유하기</button>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
 
     <!-- Modal Action -->
     <script>
 
         /* Open Modal*/
         $('#nav_bar_add_box').click(function (){   // nav_bar_add_box를 click하면 함수 실행
-            $('.modal_overlay').css({              // 그 함수는 .modal_overlay의 css 속성 중
+            $('#first_modal').css({                // 그 함수는 first_modal의 css 속성 중
                 display : 'flex'                   // display 값을 flex로 변경함 (기본은 none)
             });
             $(document.body).css({
@@ -345,10 +400,20 @@
             }
 
             if (files[0].type.match(/image.*/)) {   // 파일 타입이 이미지인지 검사
-                $(e.target).css({                   // 업로드한 파일을 임시 URL로 변환. div 배경에 이미지 표시
+
+                $('#first_modal').css({                   // first_modal은 끄고
+                    display : 'none'
+                });
+                $('#second_modal').css({                  // second_modal 켜기
+                    display : 'flex'
+                });
+
+                $('.img_upload_space').css({       // 업로드한 파일을 임시 URL로 변환. div 배경에 이미지 표시
                     "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
                     "outline": "none",
-                    "background-size": "100% 100%"
+                    "background-size": "100%",
+                    "background-repeat" : "no-repeat",         // 바둑판 배열X
+                    "background-position" : "center"
                 });
             } else {
                 alert('img files only');
