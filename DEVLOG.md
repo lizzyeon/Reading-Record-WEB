@@ -2,8 +2,8 @@
 
 ## 2026-02-23
 
-<img src="static/d_images/2026-02-23-1.png.png" width="500">
-<img src="static/d_images/2026-02-23-2.png.png" width="500">
+<img src="static/d_images/2026-02-23-1.png" width="500">
+<img src="static/d_images/2026-02-23-2.png" width="500">
 
 ### 🪟 Drop 이후 모달 전환 로직 구현(second_modal)
 - first_modal, second_modal로 id를 분리하여 모달 상태를 구분

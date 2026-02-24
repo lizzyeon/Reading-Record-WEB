@@ -114,7 +114,7 @@
 
                 <!-- 게시물 -->
                 <div>
-                    <img class="profile" src="{% static feed.image %}" style="height: 600px">
+                    <img class="profile" src="{% get_media_prefix %}{{ feed.image }}" style="height: 600px">
                 </div>
 
                 <!-- 반응(클릭)/저장 -->
@@ -332,11 +332,13 @@
 
                     <!-- 글쓰는 곳 -->
                     <div>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" style="width: 100%; height: 440px"></textarea>
+                        <textarea id ="input_feed_content" class="form-control" id="exampleFormControlTextarea1" rows="3" style="width: 100%; height: 440px"></textarea>
                     </div>
 
                     <!-- 버튼 -->
-                    <button type="button" class="btn btn-info" style="width: 100%">공유하기</button>
+                    <button id="feed_create_button" type="button" class="btn btn-info" style="width: 100%">
+                        공유하기
+                    </button>
 
                 </div>
             </div>
@@ -349,6 +351,8 @@
     <!-- Modal Action -->
     <script>
 
+        let files;
+
         /* Open Modal*/
         $('#nav_bar_add_box').click(function (){   // nav_bar_add_box를 click하면 함수 실행
             $('#first_modal').css({                // 그 함수는 first_modal의 css 속성 중
@@ -356,6 +360,42 @@
             });
             $(document.body).css({
                 overflow: 'hidden'                 // 스크롤 없애기
+            });
+        });
+
+
+        $('#feed_create_button').click(function () {
+            alert("공유하기 눌렀다." + files[0].name);
+
+            let file = files[0];
+            let image = files[0].name;
+            let content = $('#input_feed_content').val();
+            let user_id = "SANDRA";
+            let profile_image = "images/PROFILE.png";
+
+            let fd = new FormData();
+            fd.append('file', file);
+            fd.append('image', image);
+            fd.append('content', content);
+            fd.append('user_id', user_id);
+            fd.append('profile_image', profile_image);
+
+            $.ajax({
+                url: "/content/upload",
+                data: fd,
+                method: "POST",
+                processData: false,
+                contentType: false,
+                success: function(data){
+                    console.log("성공");
+                },
+                error: function (request, status, error) {
+                    console.log("에러");
+                },
+                complete: function () {
+                    console.log("완료");
+                    location.replace("/main");
+                }
             });
         });
 
@@ -390,8 +430,8 @@
             e.preventDefault();
 
             e.dataTransfer = e.originalEvent.dataTransfer; // 원본 이벤트에서 실제 파일 데이터를 꺼냄
-            var files = e.target.files || e.dataTransfer.files; // 그 파일 데이터를 files 변수에 저장
-                                                                // 그 후, 이미지인지 검사하고 화면에 보여줌
+            files = e.target.files || e.dataTransfer.files; // 그 파일 데이터를 files 변수에 저장
+            console.log("뭔가 파일을 올렸네?" + files[0].name);                                                    // 그 후, 이미지인지 검사하고 화면에 보여줌
 
             /* 이미지 확인 */
             if (files.length > 1) {          // 2장 이상 업로드 시 경고
