@@ -1,5 +1,47 @@
 # 📒 BOOKSNAP Development Log
 
+## 2026-02-24
+
+<img src="static/d_images/2026-02-24-1.png" width="500">
+<img src="static/d_images/2026-02-24-2.png" width="500">
+
+### 📝 Modal2 공유 기능 구현 및 서버 연동
+- '#feed_create_button' 클릭 이벤트 구현
+- textarea에 입력한 글(content), 업로드한 이미지 파일(file), 작성자 정보(user_id, profile_image)를 jQuery로 수집
+- FormData 객체를 생성하여 파일과 텍스트 데이터를 함께 구성
+- $.ajax()를 사용해 /content/upload 경로로 POST 요청 전송
+- 요청 완료 후 location.replace("/main")로 메인 페이지 재이동 처리
+
+### 🔗 urls.py 경로 연결
+- /content/upload 경로를 UploadFeed 뷰와 연결하여 AJAX 요청이 처리되도록 설정
+- 🛠 views.py 파일 저장 및 DB 생성
+- request.FILES['file']로 이미지 파일 수신
+- request.data.get()으로 글 내용 및 사용자 정보 수신
+- MEDIA_ROOT 경로에 파일 저장 (uuid 기반 파일명 사용)
+- Feed.objects.create()로 새로운 피드 데이터 DB 저장
+- Response(status=200) 반환하여 요청 성공 처리
+
+### 🗂 settings.py 및 미디어 경로 설정
+- settings.py에 MEDIA_ROOT, MEDIA_URL 설정 추가
+- MEDIA_ROOT를 기준으로 업로드 이미지가 media 폴더에 저장되도록 저장 경로 구성
+- MEDIA_URL을 활용하여 {% get_media_prefix %}{{ feed.image }} 형태로 이미지 경로를 구성, media 폴더의 파일이 화면에 출력되도록 처리
+- uuid 기반 파일명을 생성하여 업로드 파일명 중복 방지
+
+📌 **배운 점**
+- (공유하기 클릭 → 데이터 모아서 → 서버에 보내고 → 서버가 저장 → 다시 화면에 보여줌)
+- 공유하기 클릭 → <브라우저 JS>  FormData 생성 → AJAX 이용, POST 방식으로 '/content/upload'에 전송 
+              → <Django 서버> (urls.py) url(/content/upload)과 UploadFeed와 연결 
+                           → (views.py) 'def post(self, request)' 실행(request에서 데이터 꺼내기) 
+                           → 'media'에 파일 저장 + 'Feed.objects.create()'로 DB 저장 → 응답 반환 
+              → <브라우저>    '/main'으로 이동
+
+- AJAX를 통해 페이지 새로고침 없이 서버와 비동기 통신이 가능함을 이해
+
+
+
+
+---
+
 ## 2026-02-23
 
 <img src="static/d_images/2026-02-23-1.png" width="500">
@@ -16,7 +58,7 @@
 - 모달에 id를 지정하여 JS에서 특정 요소를 제어 할 수 있음
 - e.target을 .img_upload_space를 사용하여, 드롭 위치가 아닌 second_modal 기준으로 이미지가 표시됨을 이해
 <br><br><br><br>
-- 
+
 ---
 
 ## 2026-02-22
