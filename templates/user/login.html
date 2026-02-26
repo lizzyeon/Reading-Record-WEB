@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <style>
+        /* 1. 입력창(input) 높이 강제 설정 */
+        .form-floating > .form-control {
+            height: 50px !important;     /* 높이 고정 */
+            min-height: 50px !important; /* 최소 높이 해제 */
+            line-height: 1;              /* 글자 줄간격 조정 */
+            padding-top: 1.625rem;       /* 라벨이 들어갈 공간 확보 */
+            padding-bottom: 0.625rem;
+        }
+
+        /* 2. 라벨(Label) 위치 미세 조정 */
+        .form-floating > label {
+            padding-top: 14px !important; /* 초기 라벨 위치 */
+            font-size: 13px;
+        }
+
+        /* 3. 글자를 입력 중일 때(라벨이 작아졌을 때) 위치 */
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label {
+            transform: scale(0.85) translateY(-0.7rem) translateX(0.15rem) !important;
+        }
+
+        /* 4. 버튼 높이도 동일하게 설정 */
+        .btn-info {
+            height: 50px;
+            font-weight: bold;
+            color: white; /* 버튼 글자색 흰색으로 */
+        }
+    </style>
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <title>로그인</title>
+    </head>
+
+    <body style="background: #f4f4f4">
+        <div style="display:flex; align-items: center; flex-direction: column">
+
+            <!-- 첫번째 박스 -->
+            <div style="padding: 0 20px; border: solid 2px rgb(219, 219, 219); background-color: rgb(250, 250, 250);
+            text-align: center; width: 300px; min-height: 360px; margin-top: 70px">
+
+                <!-- 로고 -->
+                <div style="padding: 20px">
+                    <img src="{% static 'images/BOOKSNAP.png' %}" style="height:50px;">
+                </div>
+
+                <!-- 멘트 -->
+                <div style="font-weight: bold; color:gray; font-size: 14px; padding-bottom: 30px">
+                    당신의 독서기록을<br>북스냅에서 시작하세요.
+                </div>
+
+                <!-- 회원가입 데이터 -->
+                <div>
+                    <!-- 이메일 -->
+                    <div class="form-floating mb-2">
+                        <input type="email" class="form-control" style="font-size: 14px" id="floatingEmail" placeholder="name@example.com">
+                        <label for="floatingInput" style="color: gray; font-size: 13px">이메일 주소</label>
+                    </div>
+
+                    <!-- 비밀번호 -->
+                    <div class="form-floating mb-2">
+                        <input type="password" class="form-control" style="font-size: 14px" id="floatingPassword" placeholder="Password">
+                        <label for="floatingPassword" style="color: gray; font-size: 13px ">비밀번호</label>
+                    </div>
+
+                </div>
+
+                <!-- 로그인 버튼 -->
+                <button type="button" class="btn btn-info" style="width: 100%">로그인</button>
+
+            </div>
+            <!-- 두번째 박스 -->
+            <div style="padding: 0 20px; border: solid 2px rgb(219, 219, 219); background-color: rgb(250, 250, 250);
+            text-align: center; width: 300px; min-height: 60px; margin-top: 10px">
+                <div style="display: flex; justify-content: center; align-items: center; height: 57px">
+                    계정이 없으신가요?&nbsp<a href="join">가입하기</a>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

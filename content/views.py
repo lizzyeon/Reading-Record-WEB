@@ -17,11 +17,12 @@ class Main(APIView):
 class UploadFeed(APIView):
     def post(self, request):
 
-        # 일단 파일 불러오기
+        # 데이터 꺼내기
         file = request.FILES['file']
         uuid_name = uuid4().hex
         save_path = os.path.join(MEDIA_ROOT, uuid_name)
 
+        # ('media'에) 파일 저장
         with open(save_path, 'wb+') as destination:
             for chunk in file.chunks():
                 destination.write(chunk)
@@ -31,6 +32,10 @@ class UploadFeed(APIView):
         user_id= request.data.get('user_id')
         profile_image= request.data.get('profile_image')
 
+        # DB 저장
         Feed.objects.create(image=image, content=content, user_id=user_id, profile_image=profile_image, like_count=0)
 
+        # '성공했다'고 브라우저에 알려줌
         return Response(status=200)
+    
+

@@ -12,7 +12,7 @@
     <!-- Google Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
-    <!-- Jquery Link -->
+    <!-- Jquery -->
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 
     <title>독서기록장</title>
@@ -363,42 +363,6 @@
             });
         });
 
-
-        $('#feed_create_button').click(function () {
-            alert("공유하기 눌렀다." + files[0].name);
-
-            let file = files[0];
-            let image = files[0].name;
-            let content = $('#input_feed_content').val();
-            let user_id = "SANDRA";
-            let profile_image = "images/PROFILE.png";
-
-            let fd = new FormData();
-            fd.append('file', file);
-            fd.append('image', image);
-            fd.append('content', content);
-            fd.append('user_id', user_id);
-            fd.append('profile_image', profile_image);
-
-            $.ajax({
-                url: "/content/upload",
-                data: fd,
-                method: "POST",
-                processData: false,
-                contentType: false,
-                success: function(data){
-                    console.log("성공");
-                },
-                error: function (request, status, error) {
-                    console.log("에러");
-                },
-                complete: function () {
-                    console.log("완료");
-                    location.replace("/main");
-                }
-            });
-        });
-
         /* Event 연결 */
         $('.img_upload_space')            // drog&drop html에 대하여
             .on("dragover", dragOver)     // 파일을 그 영역 위로 끌어오면 dragOver 함수 실행
@@ -461,6 +425,47 @@
             }
 
         }
+
+        /* 공유하기 버튼 클릭 */
+        $('#feed_create_button').click(function () {
+            alert("공유하기 눌렀다." + files[0].name);
+
+            /* 데이터 모아서 */
+            let file = files[0];                            // files[0] : 드롭했던 이미지 파일
+            let image = files[0].name;                      // files[0].name : 파일 이름
+            let content = $('#input_feed_content').val();   // textarea에 입력한 글 / .val() : input 값 읽기
+            let user_id = "SANDRA";
+            let profile_image = "images/PROFILE.png";
+
+            /* FormData에 담고 */
+            let fd = new FormData();                        // 서버로 보낼 데이터들(파일+문자열+텍스트)
+            fd.append('file', file);                        // 위의 내용들을 FormData에 담는다
+            fd.append('image', image);
+            fd.append('content', content);
+            fd.append('user_id', user_id);
+            fd.append('profile_image', profile_image);
+
+            /* 서버로 보내기 */
+            $.ajax({                                        // AJAX(비동기)로 브라우저 → Django 서버로 데이터 전달
+                data: fd,                                   // 1. FormData에 담긴 파일+글 데이터를
+                method: "POST",                             // 2. 서버로 전달하는데
+                url: "/content/upload",                     // 3. 이 주소로 요청(urls.py에서 UploadFeed와 연결)
+                processData: false,
+                contentType: false,
+
+                success: function(data){
+                    console.log("성공");
+                },
+                error: function (request, status, error) {
+                    console.log("에러");
+                },
+                complete: function () {
+                    console.log("완료");
+                    location.replace("/main");              // main 페이지로 이동
+                }
+            });
+        });
+
     </script>
 
 
