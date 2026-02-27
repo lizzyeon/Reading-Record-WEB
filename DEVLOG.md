@@ -1,5 +1,28 @@
 # 📒 BOOKSNAP Development Log
 
+## 2026-02-26
+
+<div style="display: flex; justify-content: center; gap: 20px;">
+  <img src="static/d_images/2026-02-26-1.png" width="500">
+  <img src="static/d_images/2026-02-26-2.png" width="500">
+</div>
+
+### 🧾 Join / Login 화면 UI 구현
+- Bootstrap form-floating 구조를 활용해 입력 폼 구성
+  - 기본 height만 수정 시 스타일이 적용되지 않는 문제 발생
+  - form-floating은 height, min-height, padding 등이 동시에 계산되도록 설계되어 있어
+    height만 수정 시 min-height 규칙에 의해 무시되기 때문
+  - Bootstrap의 min-height, padding, label transform 구조까지 함께 수정하여 정상 동작 구현
+
+
+📌 **배운 점**
+- Bootstrap 컴포넌트는 단순한 스타일 모음이 아니라 여러 CSS 속성이 서로 연결되어 동작하는 구조적 시스템임을 이해
+- 특정 속성(height)만 수정하면 다른 속성(min-height, padding, transform 등)에 의해 동작이 유지되거나 깨질 수 있다는 점을 경험
+- 원하는 UI를 구현하려면 개별 속성 수정이 아니라 컴포넌트 전체 동작 구조를 파악한 뒤 함께 조정해야 함을 이해
+<br><br><br><br>
+
+---
+
 ## 2026-02-24
 
 <img src="static/d_images/2026-02-24-1.png" width="500">
@@ -36,9 +59,7 @@
               → <브라우저>    '/main'으로 이동
 
 - AJAX를 통해 페이지 새로고침 없이 서버와 비동기 통신이 가능함을 이해
-
-
-
+<br><br><br><br>
 
 ---
 
