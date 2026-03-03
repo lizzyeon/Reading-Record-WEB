@@ -3,8 +3,8 @@
 ## 2026-02-26
 
 <div style="display: flex; justify-content: center; gap: 20px;">
-  <img src="static/d_images/2026-02-26-1.png" width="500">
-  <img src="static/d_images/2026-02-26-2.png" width="500">
+  <img src="static/d_images/2026-02-26-1.png" width="250">
+  <img src="static/d_images/2026-02-26-2.png" width="250">
 </div>
 
 ### 🧾 Join / Login 화면 UI 구현

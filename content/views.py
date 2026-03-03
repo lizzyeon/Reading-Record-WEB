@@ -3,15 +3,29 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from uuid import uuid4
 from .models import Feed
+from user.models import User
 import os
 from BOOKSNAP.settings import MEDIA_ROOT
 
 
-class Main(APIView):
+class Main(APIView):    # Main을 처리하는 view
     def get(self, request):
-        feed_list = Feed.objects.all().order_by('-id')  # select * from content_feed;
+        feed_list = Feed.objects.all().order_by('-id')      # feed 테이블의 모든(all) 데이터(objects)를 가져옴.
+                                                            # id 기준 내림차순(최신 글이 위로)
+                                                            # SELECT * FROM content_feed ORDER BY id DESC;  와 동일
+        # user 정보를 편하게 사용하기 위함(프로필 등에)
+        email = request.session.get('email')                # 로그인할 때 세션에 저장해둔 이메일 가져옴(지금 로그인한 사람 이메일)
+        user = User.objects.filter(email=email).first()     # 이메일로 user 조회
 
-        return render(request, "BOOKSNAP/MAIN.html", {"feeds": feed_list})
+        # 로그인 정보가 없으면 로그인 화면으로 이동(세션에 email 없거나, DB에 user 없을 시)
+        if email is None:
+            return render(request, "user/login.html")
+
+        if user is None:
+            return render(request, "user/login.html")
+
+        # 정상 로그인 상태면 Main 렌더링
+        return render(request, "BOOKSNAP/MAIN.html", {"feeds": feed_list, "user" : user})
 
 
 class UploadFeed(APIView):
