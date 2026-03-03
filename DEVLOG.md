@@ -1,5 +1,45 @@
 # 📒 BOOKSNAP Development Log
 
+## 2026-03-03
+
+<div style="display: flex; justify-content: center; gap: 20px;">
+  <img src="static/d_images/2026-03-03-1.png" width="250">
+  <img src="static/d_images/2026-03-03-2.png" width="250">
+</div>
+  <img src="static/d_images/2026-03-03-3.png" width="500">
+
+### 🔐 회원가입 기능 구현 (AJAX 기반)
+- join.html에서 입력값(email, password, name, nickname) 수집
+- $.ajax()를 사용하여 가입 정보를 /user/join으로 POST 요청
+- Django Join.post()에서 사용자 생성
+- make_password()를 활용해 비밀번호 단방향 암호화 저장
+- 가입 성공 시 로그인 화면으로 이동 처리
+
+### 🔑 로그인 기능 구현 (AJAX 기반)
+- login.html에서 이메일, 비밀번호 입력값 수집
+- $.ajax()를 사용하여 로그인 정보를 /user/login으로 POST 요청
+- User.objects.filter(email=email).first()로 사용자 조회
+- check_password()로 비밀번호 검증
+- 로그인 성공 시 /main으로 이동
+- 로그인 실패 시 서버에서 전달한 메시지를 alert로 출력
+
+### 🏠 메인 화면 접근 제어 로직 구현
+- request.session.get('email')을 통해 로그인 상태 확인
+- 로그인 세션이 없거나 유저가 존재하지 않을 경우 로그인 페이지로 이동
+- Feed.objects.all().order_by('-id')로 최신 피드 목록 조회
+- render()를 통해 feeds와 user 데이터를 템플릿에 전달
+
+📌 **배운 점**
+- 단방향/양방향 암호와의 차이 이해.
+  비밀번호는 복호화가 불가능한 단방향 해시 방식으로 저장해야 하며,
+  주소나 주민번호 등은 필요 시 복호화가 가능한 양방향 암호화 방식을 사용함
+- User.objects.filter(email=email).first()
+  filter()은 기본적으로 리스트 형태의 QuerySet을 반환하지만, 
+  '.first()'를 활용하면 반복문이나 인덱싱 없이 바로 객체에 접근할 수 있어 코드가 간결해진다.
+<br><br><br><br>
+
+---
+
 ## 2026-02-26
 
 <div style="display: flex; justify-content: center; gap: 20px;">
