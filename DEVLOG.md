@@ -7,7 +7,7 @@
 - main.html 상단 프로필 아이콘 클릭 시 드롭다운 메뉴 표시(Bootstrap dropdown 컴포넌트 활용)
 - 'MY SNAP → /content/mysnap', 'LOGOUT → /user/logout' 로 이동 (BOOKSHELF 추후 예정)
 - **드롭다운 메뉴 레이어 문제 해결**
-  - 프로필 드롭다운 메뉴가 오른쪽 피드 영역에 가려지는 문제 발생.
+  - 프로필 드롭다운 메뉴가 오른쪽 피드 영역에 가려지는 문제 발생
   - 피드 영역이 navbar보다 더 높은 stacking context를 가지고 있었기 때문.(피드의 레이어가 더 위)
   - .navbar{ position: relative; z-index: 1050 } 로 문제 해결
 
@@ -16,13 +16,17 @@
 - flex 레이아웃을 활용하여 프로필 영역과 텍스트 영역을 좌우 배치
 - 회원가입 시 profile_image 필드를 기본 이미지로 초기화
 
-### 🔄 프로필 이미지 업로드 기능 연동
+### 🔄 프로필 이미지 업로드 및 기능 연동
 <img src="static/d_images/2026-03-05-2.png" width="500"><br>
-- "프로필 사진 편집" 버튼 클릭 시 숨겨진 file input 실행(display: none)
-- 파일 선택 시 onchange 이벤트로 profile_upload() 함수 실행
-- Feed 이미지 업로드와 같은 방법으로 진행
+- "프로필 사진 편집" 버튼 클릭(`<button id="button_profileupload">`)
+- 숨겨진 file input 실행(display: none, `$('#button_profileupload').click(function(){ $('#input_fileupload').click(); })`)
+- 파일 선택 시 onchange 이벤트로 profile_upload() 함수 실행(`input type="file"`, `onchange="profile_upload()`")
+- Feed 이미지 업로드와 같은 방법(FormData를 AJAX로 전송)으로 진행 (`$.ajax({ url: "/user/profile/upload", method: "POST" })`)
+- Django 서버에서 이미지 파일 저장 후 사용자 프로필 이미지 갱신
+(`user/views.py → UploadProfile.post()에서 request.FILES['file']로 파일 수신 후 user.profile_image = uuid_name 저장`)
 - 프로필 이미지 교체 시 메인 우측 피드, 네비바, MYSNAP 페이지 등 user.profile_image를 사용하는 모든 영역에 즉시 반영하도록 구현 ⬇️<br><br>
-<img src="static/d_images/2026-03-05-3.png" width="500">
+
+- <img src="static/d_images/2026-03-05-3.png" width="500">
 <img src="static/d_images/2026-03-05-4.png" width="500"><br>
 
 ### 👥 사용자별 게시물 프로필 유지

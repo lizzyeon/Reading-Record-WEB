@@ -10,7 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Google Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <!-- Jquery -->
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -75,6 +75,22 @@
             margin-right: 12px;
         }
 
+        /** 아이콘 관련 **/
+        /* 모든 아이콘의 기본값은 '채우지 않음(0)'으로 고정 */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* 색을 채우고 싶은 아이콘 class에 'filled'를 추가 */
+        .filled {
+            font-variation-settings: 'FILL' 1 !important;
+        }
+
+        /* 마우스를 올렸을 때(Hover) 'click-fill' 추가해 색 채우기 */
+        .material-symbols-outlined.click-fill:hover {
+            font-variation-settings: 'FILL' 1;
+        }
+
 
     </style>
 </head>
@@ -137,55 +153,66 @@
             {% for feed in feeds %}
                 <div class="feed_box" style="margin-bottom: 30px">
 
-                <!-- 프로필 -->
-                <div style="display: flex; flex-direction: row; align-items: center; margin: 10px">
-                    <!-- 프로필 사진 -->
-                    <div class="box" style="height: 60px; width: 60px">
-                        <img class="profile" src="{{ feed.profile_image }}" style="height:60px; width: 60px">
+                    <!-- 프로필 -->
+                    <div style="display: flex; flex-direction: row; align-items: center; margin: 10px">
+                        <!-- 프로필 사진 -->
+                        <div class="box" style="height: 60px; width: 60px">
+                            <img class="profile" src="{% get_media_prefix %}{{ feed.profile_image }}" style="height:60px; width: 60px">
+                        </div>
+                        <!-- 아이디 -->
+                        <div style="margin-left: 10px">
+                            <b>{{ feed.nickname }}</b>
+                        </div>
                     </div>
-                    <!-- 아이디 -->
-                    <div style="margin-left: 10px">
-                        <b>{{ feed.user_id }}</b>
-                    </div>
-                </div>
 
-                <!-- 게시물 -->
-                <div>
-                    <img class="profile" src="{% get_media_prefix %}{{ feed.image }}" style="height: 600px">
-                </div>
-
-                <!-- 반응(클릭)/저장 -->
-                <div  style="display: flex; flex-direction: row; justify-content: space-between; margin: 10px">
+                    <!-- 게시물(사진) -->
                     <div>
-                        <span class="material-symbols-outlined">favorite</span>
-                        <span class="material-symbols-outlined">comment</span>
-                        <span class="material-symbols-outlined">send</span>
+                        <img class="profile" src="{% get_media_prefix %}{{ feed.image }}" style="height: 600px">
                     </div>
-                    <div>
-                        <span class="material-symbols-outlined">bookmark</span>
+
+                    <!-- 반응(클릭)/저장 -->
+                    <div  style="display: flex; flex-direction: row; justify-content: space-between; margin: 10px">
+                        <div>
+                            <span class="material-symbols-outlined">favorite</span>
+                            <span class="material-symbols-outlined">comment</span>
+                            <span class="material-symbols-outlined">send</span>
+                        </div>
+                        <div>
+                            <span class="material-symbols-outlined">bookmark</span>
+                        </div>
+                    </div>
+
+                    <!-- 좋아요 -->
+                    <div style="text-align: left; font-size: 14px; margin: 0 10px">
+                        LIZZY <b>외 {{ feed.like_count }}명</b>이 좋아합니다
+                    </div>
+
+                    <!-- 게시물(글) -->
+                    <div style="text-align: left; font-size: 16px; margin-left: 10px; margin-bottom: 7px; margin-top: 7px">
+                        <b>{{ feed.nickname }}</b> {{ feed.content }}
+                    </div>
+
+                    <!-- 댓글들 -->
+                    <div id="reply_list_{{ feed.id }}">
+                        {% for reply in feed.reply_list %}
+                            <div style="text-align: left; font-size: 16px; margin-left: 10px; margin-bottom: 5px">
+                                <b>{{ reply.nickname }}</b> {{ reply.reply_content}}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+
+                    <div style="display: flex; flex-direction: row; border-top: solid 1px #dbdbdb; align-items: center">
+                        <input id="reply_{{ feed.id }}" type="text" class="form-control" style="box-shadow: none;
+                            margin-top: 5px; margin-bottom: 5px; border: none" placeholder="댓글 달기...">
+                        <div class="upload_reply" feed_id="{{ feed.id }}" style="display: flex; justify-content: center;
+                            align-items: center; width: 40px; cursor: pointer">
+                            <span class="material-symbols-outlined click-fill" style="color: blue">send</span>
+                        </div>
                     </div>
                 </div>
-
-                <!-- 좋아요 -->
-                <div style="text-align: left; font-size: 14px; margin: 0 10px">
-                    LIZZY <b>외 {{ feed.like_count }}명</b>이 좋아합니다
-                </div>
-
-                <div style="text-align: left; font-size: 16px; margin-left: 10px; margin-bottom: 7px; margin-top: 7px">
-                    <b>{{ feed.user_id }}</b> {{ feed.content}}
-                </div>
-
-                <!-- 댓글들 -->
-                <div style="text-align: left; font-size: 16px; margin: 0 10px"><b>PEDRO</b> 좋은 책이네요!</div>
-                <div style="text-align: left; font-size: 16px; margin: 0 10px"><b>MARIA</b> 저도 읽어봐야겠어요</div>
-                <div style="text-align: left; font-size: 16px; margin: 0 10px"><b>ANNA</b> 추천 감사해요 >_<</div>
-            <hr style="margin-top: 10px; margin-bottom: 0px">
-                <div> <input type="text" class="form-control" style="box-shadow: none; border: none" placeholder="댓글 달기..."> </div>
-            </div>
             {% endfor %}
-
         </div>
-
 
         <!-- 오른쪽 피드 -->
         <div style="width: 400px; height: 2000px; background: #f4f4f4; position: fixed; left: 62%">
@@ -242,74 +269,11 @@
                         <a href="#" style="font-size: 14px; font-weight: bold; color: blue; text-decoration: none; margin-right: 15px">팔로우</a>
                     </div>
                 </div>
-                <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px">
-
-                    <div style="display: flex; flex-direction: row;">
-                        <!-- 프로필 사진 -->
-                        <div class="box" style="height: 40px; width: 40px">
-                            <img class="profile" src="{% static 'images/PEDRO.png' %}" style="height:40px; width: 40px">
-                        </div>
-
-                        <!-- 아이디 -->
-                        <div style="margin-left: 10px; text-align: left">
-                            <div style="font-weight: bold; font-size: 14px">PEDRO</div>
-                            <div style="color: gray; font-size: 12px">MUHAMAD ALI</div>
-                        </div>
-                    </div>
-
-                        <!-- 팔로우 -->
-                    <div>
-                        <a href="#" style="font-size: 14px; font-weight: bold; color: blue; text-decoration: none; margin-right: 15px">팔로우</a>
-                    </div>
-                </div>
-                <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px">
-
-        <div style="display: flex; flex-direction: row;">
-            <!-- 프로필 사진 -->
-            <div class="box" style="height: 40px; width: 40px">
-                <img class="profile" src="{% static 'images/PEDRO.png' %}" style="height:40px; width: 40px">
-            </div>
-
-            <!-- 아이디 -->
-            <div style="margin-left: 10px; text-align: left">
-                <div style="font-weight: bold; font-size: 14px">PEDRO</div>
-                <div style="color: gray; font-size: 12px">MUHAMAD ALI</div>
-            </div>
-        </div>
-
-            <!-- 팔로우 -->
-        <div>
-            <a href="#" style="font-size: 14px; font-weight: bold; color: blue; text-decoration: none; margin-right: 15px">팔로우</a>
-        </div>
-    </div>
-                <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px">
-
-                    <div style="display: flex; flex-direction: row;">
-                        <!-- 프로필 사진 -->
-                        <div class="box" style="height: 40px; width: 40px">
-                            <img class="profile" src="{% static 'images/PEDRO.png' %}" style="height:40px; width: 40px">
-                        </div>
-
-                        <!-- 아이디 -->
-                        <div style="margin-left: 10px; text-align: left">
-                            <div style="font-weight: bold; font-size: 14px">PEDRO</div>
-                            <div style="color: gray; font-size: 12px">MUHAMAD ALI</div>
-                        </div>
-                    </div>
-
-                        <!-- 팔로우 -->
-                    <div>
-                        <a href="#" style="font-size: 14px; font-weight: bold; color: blue; text-decoration: none; margin-right: 15px">팔로우</a>
-                    </div>
-                </div>
-
             </div>
 
             <!-- 그 외 안내 -->
             <div style="margin-top: 50px; margin-left: 10px; font-size: 12px; color: darkgray; text-align: left"> 2026 독서기록장 by LIZZY </div>
-
         </div>
-
     </div>
 
     <!-- #1 Modal Layout(HTML) -->
@@ -395,6 +359,41 @@
     <!-- Modal Action -->
     <script>
 
+        /* Send Reply */
+        $('.upload_reply').click(function(event){
+            let feed_id = event.currentTarget.attributes.getNamedItem('feed_id').value;
+            let reply_id = 'reply_' + feed_id;
+            let reply_content = $('#' + reply_id).val();
+
+            if(reply_content.length <= 0){
+                alert("댓글을 입력하세요.");
+                return 0;
+            }
+
+            $.ajax({
+                data: {
+                    feed_id: feed_id,
+                    reply_content: reply_content
+                },
+                method: "POST",
+                url: "/content/reply",
+
+                success: function (data) {
+                    console.log("성공");
+                    $('#reply_list_' + feed_id).append("<div style='text-align: left; font-size: 16px; margin-left: 10px; margin-bottom: 5px'><b>{{ user.nickname }}</b> "+reply_content+"</div>")
+
+                },
+                error: function (request, status, error) {
+                    console.log("에러");
+                },
+                complete: function () {
+                    console.log("완료");
+                    $('#' + reply_id).val('');
+                }
+            });
+        })
+
+        /* Close Modal */
         $('.modal_close').click(function () {         // close 버튼 누르면
             $('#first_modal').css({                   // first_modal 끄기
                 display: 'none'
@@ -472,7 +471,9 @@
                     "background-repeat" : "no-repeat",         // 바둑판 배열X
                     "background-position" : "center"
                 });
-            } else {
+            }
+
+            else {
                 alert('img files only');
                 return;
             }
@@ -487,16 +488,12 @@
             let file = files[0];                            // files[0] : 드롭했던 이미지 파일
             let image = files[0].name;                      // files[0].name : 파일 이름
             let content = $('#input_feed_content').val();   // textarea에 입력한 글 / .val() : input 값 읽기
-            let user_id = "{{ user.nickname }}";
-            let profile_image = "{% get_media_prefix %}{{user.profile_image}}";
 
             /* FormData에 담고 */
             let fd = new FormData();                        // 서버로 보낼 데이터들(파일+문자열+텍스트)
             fd.append('file', file);                        // 위의 내용들을 FormData에 담는다
             fd.append('image', image);
             fd.append('content', content);
-            fd.append('user_id', user_id);
-            fd.append('profile_image', profile_image);
 
             /* 서버로 보내기 */
             $.ajax({                                        // AJAX(비동기)로 브라우저 → Django 서버로 데이터 전달
@@ -522,7 +519,7 @@
     </script>
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
