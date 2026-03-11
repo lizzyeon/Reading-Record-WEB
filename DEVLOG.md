@@ -18,8 +18,8 @@
 
 ### 💬 댓글 작성 기능 구현
 <div style="display: flex; justify-content: left; gap: 20px;">
-  <img src="static/d_images/2026-03-06-3.png" width="300"><br>
-  <img src="static/d_images/2026-03-06-4.png" width="300"><br>
+  <img src="static/d_images/2026-03-06-3.png" width="300">
+  <img src="static/d_images/2026-03-06-4.png" width="300">
 </div>
 
 - 피드 하단에 댓글 입력창을 추가하고 사용자가 댓글을 작성할 수 있도록 구현<br>

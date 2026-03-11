@@ -91,6 +91,16 @@
             font-variation-settings: 'FILL' 1;
         }
 
+        . favorite{
+            color: black;
+        }
+
+        .favorite.filled{
+            color: red;
+            font-variation-settings: 'FILL' 1;
+        }
+
+
 
     </style>
 </head>
@@ -116,7 +126,7 @@
         <div class="d-flex gap-3 ms-auto">
             <a href="/main" style="color: black"><span class="material-symbols-outlined">home</span></a>
             <span class="material-symbols-outlined">send</span>
-            <span id="nav_bar_add_box" class="material-symbols-outlined">add_box</span>
+            <span id="nav_bar_add_box" class="material-symbols-outlined"  style="cursor: pointer">add_box</span>
             <span class="material-symbols-outlined">explore</span>
             <span class="material-symbols-outlined">mood_heart</span>
 
@@ -173,12 +183,19 @@
                     <!-- 반응(클릭)/저장 -->
                     <div  style="display: flex; flex-direction: row; justify-content: space-between; margin: 10px">
                         <div>
-                            <span class="material-symbols-outlined">favorite</span>
+                            <span id="favorite_{{ feed.id }}" feed_id="{{ feed.id }}"
+                                  class="favorite material-symbols-outlined {% if feed.is_liked %}filled{% endif %}"
+                                  style="cursor: pointer">
+                            favorite
+                            </span>
                             <span class="material-symbols-outlined">comment</span>
-                            <span class="material-symbols-outlined">send</span>
                         </div>
                         <div>
-                            <span class="material-symbols-outlined">bookmark</span>
+                            <span id="bookmark_{{ feed.id }}" feed_id="{{ feed.id }}"
+                                  class="bookmark material-symbols-outlined {% if feed.is_marked %}filled{% endif %}"
+                                  style="cursor: pointer">
+                            bookmark
+                            </span>
                         </div>
                     </div>
 
@@ -192,22 +209,25 @@
                         <b>{{ feed.nickname }}</b> {{ feed.content }}
                     </div>
 
-                    <!-- 댓글들 -->
-                    <div id="reply_list_{{ feed.id }}">
-                        {% for reply in feed.reply_list %}
-                            <div style="text-align: left; font-size: 16px; margin-left: 10px; margin-bottom: 5px">
-                                <b>{{ reply.nickname }}</b> {{ reply.reply_content}}
+                    <!-- 댓글 창 구성 -->
+                    <div>
+                        <!-- 댓글들 -->
+                        <div id="reply_list_{{ feed.id }}">
+                            {% for reply in feed.reply_list %}
+                                <div style="text-align: left; font-size: 16px; margin-left: 10px; margin-bottom: 5px">
+                                    <b>{{ reply.nickname }}</b> {{ reply.reply_content}}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- 댓글 게시 버튼 -->
+                        <div style="display: flex; flex-direction: row; border-top: solid 1px #dbdbdb; align-items: center">
+                            <input id="reply_{{ feed.id }}" type="text" class="form-control" style="box-shadow: none;
+                                margin-top: 5px; margin-bottom: 5px; border: none" placeholder="댓글 달기...">
+                            <div class="upload_reply" feed_id="{{ feed.id }}" style="display: flex; justify-content: center;
+                                align-items: center; width: 40px; cursor: pointer">
+                                <span class="material-symbols-outlined click-fill" style="color: blue">send</span>
                             </div>
-                        {% endfor %}
-                    </div>
-
-
-                    <div style="display: flex; flex-direction: row; border-top: solid 1px #dbdbdb; align-items: center">
-                        <input id="reply_{{ feed.id }}" type="text" class="form-control" style="box-shadow: none;
-                            margin-top: 5px; margin-bottom: 5px; border: none" placeholder="댓글 달기...">
-                        <div class="upload_reply" feed_id="{{ feed.id }}" style="display: flex; justify-content: center;
-                            align-items: center; width: 40px; cursor: pointer">
-                            <span class="material-symbols-outlined click-fill" style="color: blue">send</span>
                         </div>
                     </div>
                 </div>
@@ -290,7 +310,9 @@
                     <span class="material-symbols-outlined" style="margin-right: 5px">photo_camera</span>
                     SNAP YOUR BOOK
                 </div>
-                <div><span class="modal_close material-symbols-outlined">close</span></div>
+                <div><span class="modal_close material-symbols-outlined" style="cursor: pointer; margin-right: 5px">
+                    close</span>
+                </div>
             </div>
 
             <!-- Image Drog & Drop-->
@@ -313,7 +335,7 @@
                     <span class="material-symbols-outlined" style="margin-right: 5px">photo_camera</span>
                     SNAP YOUR BOOK
                 </div>
-                <div><span class="modal_close material-symbols-outlined">close</span></div>
+                <div><span class="modal_close material-symbols-outlined" style="cursor: pointer; margin-right: 5px">close</span></div>
             </div>
 
             <!-- 이미지 | 글쓰기 -->
@@ -359,36 +381,98 @@
     <!-- Modal Action -->
     <script>
 
-        /* Send Reply */
-        $('.upload_reply').click(function(event){
+        /* Click Like */
+        $('.favorite').click(function(event){
             let feed_id = event.currentTarget.attributes.getNamedItem('feed_id').value;
-            let reply_id = 'reply_' + feed_id;
-            let reply_content = $('#' + reply_id).val();
-
-            if(reply_content.length <= 0){
-                alert("댓글을 입력하세요.");
-                return 0;
+            let favorite_id = event.target.id;
+            if($('#'+favorite_id).hasClass('filled')){
+                $('#'+favorite_id).removeClass('filled');
+            }else {
+                $('#' + favorite_id).addClass('filled');
             }
 
-            $.ajax({
-                data: {
-                    feed_id: feed_id,
-                    reply_content: reply_content
+            $.ajax({                                        // 서버에 AJAX 요청
+                data: {                                     // 서버로 보낼 데이터
+                    feed_id: feed_id,                       // 피드 번호
                 },
                 method: "POST",
-                url: "/content/reply",
+                url: "/content/like",
 
                 success: function (data) {
                     console.log("성공");
-                    $('#reply_list_' + feed_id).append("<div style='text-align: left; font-size: 16px; margin-left: 10px; margin-bottom: 5px'><b>{{ user.nickname }}</b> "+reply_content+"</div>")
-
                 },
                 error: function (request, status, error) {
                     console.log("에러");
                 },
                 complete: function () {
                     console.log("완료");
-                    $('#' + reply_id).val('');
+                }
+            });
+
+        });
+
+        /* Click Bookmark */
+        $('.bookmark').click(function(event){
+            let feed_id = event.currentTarget.attributes.getNamedItem('feed_id').value;
+            let bookmark_id = event.target.id;
+            if($('#'+bookmark_id).hasClass('filled')){
+                $('#'+bookmark_id).removeClass('filled');
+            }else {
+                $('#' + bookmark_id).addClass('filled');
+            }
+
+            $.ajax({                                        // 서버에 AJAX 요청
+                data: {                                     // 서버로 보낼 데이터
+                    feed_id: feed_id,                       // 피드 번호
+                },
+                method: "POST",
+                url: "/content/bookmark",
+
+                success: function (data) {
+                    console.log("성공");
+                },
+                error: function (request, status, error) {
+                    console.log("에러");
+                },
+                complete: function () {
+                    console.log("완료");
+                }
+            });
+
+        });
+
+
+        /* Send Reply */
+        $('.upload_reply').click(function(event){           // send 버튼 누르면
+            let feed_id = event.currentTarget.attributes.getNamedItem('feed_id').value; // feed_id(몇 번 게시물인지) 확인
+            let reply_id = 'reply_' + feed_id;              // 댓글 입력창 id 만들기(reply_3 : 3번 피드의 댓글)
+            let reply_content = $('#' + reply_id).val();    // 댓글 내용 가져오기(#reply_3.val() : 3번 피드의 댓글 내용)
+                                                            //                         *val() : input 내용
+            if(reply_content.length <= 0){                  // 댓글 내용 없으면 alert
+                alert("댓글을 입력하세요.");
+                return 0;
+            }
+
+            $.ajax({                                        // 서버에 AJAX 요청
+                data: {                                     // 서버로 보낼 데이터
+                    feed_id: feed_id,                       // 피드 번호와 내용
+                    reply_content: reply_content
+                },
+                method: "POST",
+                url: "/content/reply",
+
+                success: function (data) {                  // 성공 시 화면에 댓글 추가
+                    console.log("성공");                     // #reply_list_3 : 3번 피드에 달린 댓글(닉네임 + 내용)
+                    $('#reply_list_' + feed_id).append(     // #reply_list_3 : 3번 피드에 div 추가
+                        "<div style='text-align: left; font-size: 16px; margin-left: 10px; margin-bottom: 5px'>" +
+                        "<b>{{ user.nickname }}</b> "+reply_content+"</div>")
+                },
+                error: function (request, status, error) {
+                    console.log("에러");
+                },
+                complete: function () {
+                    console.log("완료");
+                    $('#' + reply_id).val('');              // 성공 시 댓글 입력창 비우기
                 }
             });
         })
