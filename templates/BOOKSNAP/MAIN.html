@@ -180,17 +180,21 @@
                         <img class="profile" src="{% get_media_prefix %}{{ feed.image }}" style="height: 600px">
                     </div>
 
-                    <!-- 반응(클릭)/저장 -->
+                    <!-- 좋아요 | 댓글 | 북마크 -->
                     <div  style="display: flex; flex-direction: row; justify-content: space-between; margin: 10px">
                         <div>
+                            <!-- 좋아요 -->
                             <span id="favorite_{{ feed.id }}" feed_id="{{ feed.id }}"
                                   class="favorite material-symbols-outlined {% if feed.is_liked %}filled{% endif %}"
                                   style="cursor: pointer">
                             favorite
                             </span>
+
+                            <!-- 댓글 -->
                             <span class="material-symbols-outlined">comment</span>
                         </div>
                         <div>
+                            <!-- 북마크 -->
                             <span id="bookmark_{{ feed.id }}" feed_id="{{ feed.id }}"
                                   class="bookmark material-symbols-outlined {% if feed.is_marked %}filled{% endif %}"
                                   style="cursor: pointer">
@@ -383,20 +387,20 @@
 
         /* Click Like */
         $('.favorite').click(function(event){
-            let feed_id = event.currentTarget.attributes.getNamedItem('feed_id').value;
+            let feed_id = event.currentTarget.attributes.getNamedItem('feed_id').value;   // 어떤 피드에 좋아요를 눌렀는지
             let favorite_id = event.target.id;
-            if($('#'+favorite_id).hasClass('filled')){
-                $('#'+favorite_id).removeClass('filled');
+            if($('#'+favorite_id).hasClass('filled')){      // 하트가 filled 상태인지 확인
+                $('#'+favorite_id).removeClass('filled');   // 채워져있으면 filled 클래스 제거(취소)
             }else {
-                $('#' + favorite_id).addClass('filled');
+                $('#' + favorite_id).addClass('filled');    // 비어있으면 filled 클래스 추가(좋아요)
             }
 
-            $.ajax({                                        // 서버에 AJAX 요청
+            $.ajax({                                        // AJAX로 서버에 요청
                 data: {                                     // 서버로 보낼 데이터
                     feed_id: feed_id,                       // 피드 번호
                 },
                 method: "POST",
-                url: "/content/like",
+                url: "/content/like",                       // 해당 url로 보내라
 
                 success: function (data) {
                     console.log("성공");
